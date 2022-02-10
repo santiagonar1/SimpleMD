@@ -5,6 +5,7 @@ struct Particle {
     pos: [Real; 3],
     v: [Real; 3],
     f: [Real; 3],
+    f_old: [Real; 3],
 }
 
 struct Simulation {
@@ -34,6 +35,7 @@ mod tests {
             pos: [1.0, 2.0, 3.0],
             v: [1.0, 2.0, 3.0],
             f: [1.0, 2.0, 3.0],
+            f_old: [1.0, 2.0, 3.0],
         };
 
         assert_eq!(particle.m, 6.0);
@@ -53,6 +55,7 @@ mod tests {
                 pos: pos,
                 v: v,
                 f: f,
+                f_old: f,
             }],
             delta_t: 1.0,
         };
@@ -71,6 +74,7 @@ mod tests {
                 pos: pos,
                 v: v,
                 f: f,
+                f_old: f,
             }],
             delta_t,
         };
