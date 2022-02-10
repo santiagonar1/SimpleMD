@@ -1,6 +1,6 @@
 type Real = f64;
 
-struct Atom {
+struct Particle {
     m: Real,
     pos: [Real; 3],
     v: [Real; 3],
@@ -8,16 +8,16 @@ struct Atom {
 }
 
 struct Simulation {
-    atoms: Vec<Atom>,
+    particles: Vec<Particle>,
     delta_t: Real,
 }
 
 impl Simulation {
     fn update_pos(&mut self) {
-        for atom in &mut self.atoms {
-            let a = self.delta_t * (0.5 / atom.m);
-            for d in 0..atom.pos.len() {
-                atom.pos[d] += self.delta_t * (atom.v[d] + a * atom.f[d]);
+        for particle in &mut self.particles {
+            let a = self.delta_t * (0.5 / particle.m);
+            for d in 0..particle.pos.len() {
+                particle.pos[d] += self.delta_t * (particle.v[d] + a * particle.f[d]);
             }
         }
     }
@@ -28,18 +28,18 @@ mod tests {
     use super::*;
 
     #[test]
-    fn create_atom() {
-        let atom = Atom {
+    fn create_particle() {
+        let particle = Particle {
             m: 6.0,
             pos: [1.0, 2.0, 3.0],
             v: [1.0, 2.0, 3.0],
             f: [1.0, 2.0, 3.0],
         };
 
-        assert_eq!(atom.m, 6.0);
-        assert_eq!(atom.pos, [1.0, 2.0, 3.0]);
-        assert_eq!(atom.v, [1.0, 2.0, 3.0]);
-        assert_eq!(atom.f, [1.0, 2.0, 3.0]);
+        assert_eq!(particle.m, 6.0);
+        assert_eq!(particle.pos, [1.0, 2.0, 3.0]);
+        assert_eq!(particle.v, [1.0, 2.0, 3.0]);
+        assert_eq!(particle.f, [1.0, 2.0, 3.0]);
     }
 
     #[test]
@@ -48,7 +48,7 @@ mod tests {
         let v = [1.0, 2.0, 3.0];
         let f = [1.0, 2.0, 3.0];
         let _simulation = Simulation {
-            atoms: vec![Atom {
+            particles: vec![Particle {
                 m: 6.0,
                 pos: pos,
                 v: v,
@@ -66,7 +66,7 @@ mod tests {
         let delta_t = 1.0;
         let m = 6.0;
         let mut simulation = Simulation {
-            atoms: vec![Atom {
+            particles: vec![Particle {
                 m,
                 pos: pos,
                 v: v,
@@ -82,6 +82,6 @@ mod tests {
         for d in 0..expected_new_pos.len() {
             expected_new_pos[d] = pos[d] + delta_t * (v[d] + a * f[d]);
         }
-        assert_eq!(simulation.atoms[0].pos, expected_new_pos);
+        assert_eq!(simulation.particles[0].pos, expected_new_pos);
     }
 }
