@@ -13,6 +13,18 @@ struct Simulation {
     delta_t: Real,
 }
 
+impl Particle {
+    fn new(m: Real, pos: [Real; 3], v: [Real; 3], f: [Real; 3]) -> Particle {
+        Particle {
+            m,
+            pos,
+            v,
+            f,
+            f_old: f,
+        }
+    }
+}
+
 impl Simulation {
     fn update_pos(&mut self) {
         for particle in &mut self.particles {
@@ -30,13 +42,7 @@ mod tests {
 
     #[test]
     fn create_particle() {
-        let particle = Particle {
-            m: 6.0,
-            pos: [1.0, 2.0, 3.0],
-            v: [1.0, 2.0, 3.0],
-            f: [1.0, 2.0, 3.0],
-            f_old: [1.0, 2.0, 3.0],
-        };
+        let particle = Particle::new(6.0, [1.0, 2.0, 3.0], [1.0, 2.0, 3.0], [1.0, 2.0, 3.0]);
 
         assert_eq!(particle.m, 6.0);
         assert_eq!(particle.pos, [1.0, 2.0, 3.0]);
@@ -50,13 +56,7 @@ mod tests {
         let v = [1.0, 2.0, 3.0];
         let f = [1.0, 2.0, 3.0];
         let _simulation = Simulation {
-            particles: vec![Particle {
-                m: 6.0,
-                pos: pos,
-                v: v,
-                f: f,
-                f_old: f,
-            }],
+            particles: vec![Particle::new(6.0, pos, v, f)],
             delta_t: 1.0,
         };
     }
@@ -69,13 +69,7 @@ mod tests {
         let delta_t = 1.0;
         let m = 6.0;
         let mut simulation = Simulation {
-            particles: vec![Particle {
-                m,
-                pos: pos,
-                v: v,
-                f: f,
-                f_old: f,
-            }],
+            particles: vec![Particle::new(m, pos, v, f)],
             delta_t,
         };
 
