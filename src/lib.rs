@@ -12,6 +12,17 @@ struct Simulation {
     delta_t: Real,
 }
 
+impl Simulation {
+    fn update_pos(&mut self) {
+        for atom in &mut self.atoms {
+            let a = self.delta_t * (0.5 / atom.m);
+            for d in 0..atom.pos.len() {
+                atom.pos[d] += self.delta_t * (atom.v[d] + a * atom.f[d]);
+            }
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -48,8 +59,29 @@ mod tests {
     }
 
     #[test]
-    fn it_works() {
-        let result = 2 + 2;
-        assert_eq!(result, 4);
+    fn update_position() {
+        let pos = [1.0, 2.0, 3.0];
+        let v = [1.0, 2.0, 3.0];
+        let f = [1.0, 2.0, 3.0];
+        let delta_t = 1.0;
+        let m = 6.0;
+        let mut simulation = Simulation {
+            atoms: vec![Atom {
+                m,
+                pos: pos,
+                v: v,
+                f: f,
+            }],
+            delta_t,
+        };
+
+        simulation.update_pos();
+
+        let mut expected_new_pos = [0.0, 0.0, 0.0];
+        let a = delta_t * 0.5 / m;
+        for d in 0..expected_new_pos.len() {
+            expected_new_pos[d] = pos[d] + delta_t * (v[d] + a * f[d]);
+        }
+        assert_eq!(simulation.atoms[0].pos, expected_new_pos);
     }
 }
