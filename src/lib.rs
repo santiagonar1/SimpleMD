@@ -34,6 +34,15 @@ impl Simulation {
             }
         }
     }
+
+    fn update_v(&mut self) {
+        for particle in &mut self.particles {
+            let a = self.delta_t * (0.5 / particle.m);
+            for d in 0..particle.v.len() {
+                particle.v[d] += a * (particle.f[d] + particle.f_old[d]);
+            }
+        }
+    }
 }
 
 #[cfg(test)]
@@ -81,5 +90,27 @@ mod tests {
             expected_new_pos[d] = pos[d] + delta_t * (v[d] + a * f[d]);
         }
         assert_eq!(simulation.particles[0].pos, expected_new_pos);
+    }
+
+    #[test]
+    fn update_velocity() {
+        let pos = [1.0, 2.0, 3.0];
+        let v = [1.0, 2.0, 3.0];
+        let f = [1.0, 2.0, 3.0];
+        let delta_t = 1.0;
+        let m = 6.0;
+        let mut simulation = Simulation {
+            particles: vec![Particle::new(m, pos, v, f)],
+            delta_t,
+        };
+
+        simulation.update_v();
+
+        let mut expected_new_v = [0.0, 0.0, 0.0];
+        let a = delta_t * 0.5 / m;
+        for d in 0..expected_new_v.len() {
+            expected_new_v[d] = v[d] + a * (f[d] + f[d]);
+        }
+        assert_eq!(simulation.particles[0].v, expected_new_v);
     }
 }
