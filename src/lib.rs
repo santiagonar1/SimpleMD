@@ -12,6 +12,7 @@ struct Particle {
 struct Simulation {
     particles: Vec<Particle>,
     delta_t: Real,
+    t_end: Real,
 }
 
 impl Particle {
@@ -104,6 +105,7 @@ mod tests {
         let _simulation = Simulation {
             particles: vec![Particle::new(6.0, pos, v, f)],
             delta_t: 1.0,
+            t_end: 10.0,
         };
     }
 
@@ -113,10 +115,12 @@ mod tests {
         let v = [1.0, 2.0, 3.0];
         let f = [1.0, 2.0, 3.0];
         let delta_t = 1.0;
+        let t_end = 10.0;
         let m = 6.0;
         let mut simulation = Simulation {
             particles: vec![Particle::new(m, pos, v, f)],
             delta_t,
+            t_end,
         };
 
         simulation.update_pos();
@@ -135,10 +139,12 @@ mod tests {
         let v = [1.0, 2.0, 3.0];
         let f = [1.0, 2.0, 3.0];
         let delta_t = 1.0;
+        let t_end = 10.0;
         let m = 6.0;
         let mut simulation = Simulation {
             particles: vec![Particle::new(m, pos, v, f)],
             delta_t,
+            t_end,
         };
 
         simulation.update_v();
@@ -166,9 +172,11 @@ mod tests {
         let p2 = Particle::new(m2, pos2, v2, f2);
 
         let delta_t = 1.0;
+        let t_end = 10.0;
         let mut simulation = Simulation {
             particles: vec![p1, p2],
             delta_t,
+            t_end,
         };
 
         simulation.update_f();
