@@ -23,6 +23,23 @@ impl Particle {
             f_old: f,
         }
     }
+
+    fn add_f_from(&mut self, other: &Particle) -> Vec<Real> {
+        let mut f_from_other = Vec::with_capacity(3);
+        let r: Real = self
+            .pos
+            .iter()
+            .zip(other.pos.iter())
+            .map(|(x1, x2)| (x1 - x2).powi(2))
+            .sum();
+        let f = (self.m * other.m) / (r.sqrt() * r);
+        for d in 0..self.pos.len() {
+            f_from_other.push(f * (other.pos[d] - self.pos[d]));
+            self.f[d] += f_from_other[d];
+        }
+
+        f_from_other
+    }
 }
 
 impl Simulation {
