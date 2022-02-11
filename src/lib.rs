@@ -81,6 +81,18 @@ impl Simulation {
             self.particles[i] = particle;
         }
     }
+
+    fn run(&mut self) {
+        let mut t = 0.0;
+
+        self.update_f();
+        while t < self.t_end {
+            self.update_pos();
+            self.update_f();
+            self.update_v();
+            t += self.delta_t;
+        }
+    }
 }
 
 #[cfg(test)]
