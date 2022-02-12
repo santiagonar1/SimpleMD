@@ -8,6 +8,14 @@ pub struct Simulation {
 }
 
 impl Simulation {
+    pub fn new(particles: Vec<Particle>, delta_t: Real, t_end: Real) -> Simulation {
+        Simulation {
+            particles,
+            delta_t,
+            t_end,
+        }
+    }
+
     fn update_pos(&mut self) {
         for particle in &mut self.particles {
             let a = self.delta_t * (0.5 / particle.m);
