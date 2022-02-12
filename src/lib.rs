@@ -1,22 +1,27 @@
-type Real = f64;
+pub mod definitions;
 
 #[derive(Clone)]
 struct Particle {
-    m: Real,
-    pos: [Real; 3],
-    v: [Real; 3],
-    f: [Real; 3],
-    f_old: [Real; 3],
+    m: definitions::Real,
+    pos: [definitions::Real; 3],
+    v: [definitions::Real; 3],
+    f: [definitions::Real; 3],
+    f_old: [definitions::Real; 3],
 }
 
 struct Simulation {
     particles: Vec<Particle>,
-    delta_t: Real,
-    t_end: Real,
+    delta_t: definitions::Real,
+    t_end: definitions::Real,
 }
 
 impl Particle {
-    fn new(m: Real, pos: [Real; 3], v: [Real; 3], f: [Real; 3]) -> Particle {
+    fn new(
+        m: definitions::Real,
+        pos: [definitions::Real; 3],
+        v: [definitions::Real; 3],
+        f: [definitions::Real; 3],
+    ) -> Particle {
         Particle {
             m,
             pos,
@@ -26,9 +31,9 @@ impl Particle {
         }
     }
 
-    fn add_f_from(&mut self, other: &Particle) -> Vec<Real> {
+    fn add_f_from(&mut self, other: &Particle) -> Vec<definitions::Real> {
         let mut f_from_other = Vec::with_capacity(3);
-        let r: Real = self
+        let r: definitions::Real = self
             .pos
             .iter()
             .zip(other.pos.iter())
@@ -197,7 +202,7 @@ mod tests {
         let p2 = Particle::new(m2, pos2, v2, f2);
         let mut expected_new_f_p1 = [0.0, 0.0, 0.0];
         let mut expected_new_f_p2 = [0.0, 0.0, 0.0];
-        let r: Real = p1
+        let r: definitions::Real = p1
             .pos
             .iter()
             .zip(p2.pos.iter())
