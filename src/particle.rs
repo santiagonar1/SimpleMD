@@ -40,11 +40,10 @@ impl Particle {
 
 pub fn include_forces(p1: &mut Particle, p2: &mut Particle) {
     let f_p2_into_p1 = p1.add_f_from(p2);
-    for d in 0..p1.pos.len() {
-        p2.f[d] -= f_p2_into_p1[d];
+    for (d, force) in f_p2_into_p1.iter().enumerate() {
+        p2.f[d] -= force;
     }
 }
-
 
 #[cfg(test)]
 mod tests {
