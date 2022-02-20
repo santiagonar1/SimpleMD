@@ -1,0 +1,15 @@
+name: Build and test
+
+on: [push, pull_request]
+
+jobs:
+  linux-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cargo test --all-features --verbose --release
+  linux-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cargo test --all-features --verbose
