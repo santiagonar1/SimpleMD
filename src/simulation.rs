@@ -17,16 +17,16 @@ impl<const D: usize> Simulation<D> {
     }
 
     fn update_pos(&mut self) {
-        for particle in &mut self.particles {
+        self.particles.iter_mut().for_each(|particle| {
             particle.update_pos(self.delta_t);
             particle.update_old_f();
-        }
+        });
     }
 
     fn update_v(&mut self) {
-        for particle in &mut self.particles {
-            particle.update_v(self.delta_t);
-        }
+        self.particles
+            .iter_mut()
+            .for_each(|particle| particle.update_v(self.delta_t));
     }
 
     fn update_f(&mut self) {
