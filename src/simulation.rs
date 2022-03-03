@@ -24,10 +24,7 @@ impl<const D: usize> Simulation<D> {
 
     fn update_v(&mut self) {
         for particle in &mut self.particles {
-            let a = self.delta_t * (0.5 / particle.m);
-            for d in 0..particle.v.len() {
-                particle.v[d] += a * (particle.f[d] + particle.f_old[d]);
-            }
+            particle.update_v(self.delta_t);
         }
     }
 
