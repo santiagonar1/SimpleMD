@@ -1,14 +1,14 @@
 use crate::definitions::Real;
 use crate::particle::{self, Particle};
 
-pub struct Simulation {
-    particles: Vec<Particle>,
+pub struct Simulation<const D: usize> {
+    particles: Vec<Particle<D>>,
     delta_t: Real,
     t_end: Real,
 }
 
-impl Simulation {
-    pub fn new(particles: Vec<Particle>, delta_t: Real, t_end: Real) -> Simulation {
+impl<const D: usize> Simulation<D> {
+    pub fn new(particles: Vec<Particle<D>>, delta_t: Real, t_end: Real) -> Simulation<D> {
         Simulation {
             particles,
             delta_t,

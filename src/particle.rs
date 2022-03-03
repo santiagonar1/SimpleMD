@@ -1,16 +1,16 @@
 use crate::definitions::Real;
 
 #[derive(Clone)]
-pub struct Particle {
+pub struct Particle<const D: usize> {
     pub m: Real,
-    pub pos: [Real; 3],
-    pub v: [Real; 3],
-    pub f: [Real; 3],
-    pub f_old: [Real; 3],
+    pub pos: [Real; D],
+    pub v: [Real; D],
+    pub f: [Real; D],
+    pub f_old: [Real; D],
 }
 
-impl Particle {
-    pub fn new(m: Real, pos: [Real; 3], v: [Real; 3], f: [Real; 3]) -> Particle {
+impl<const D: usize> Particle<D> {
+    pub fn new(m: Real, pos: [Real; D], v: [Real; D], f: [Real; D]) -> Particle<D> {
         Particle {
             m,
             pos,
@@ -20,7 +20,7 @@ impl Particle {
         }
     }
 
-    pub fn add_f_from(&mut self, other: &Particle) -> Vec<Real> {
+    pub fn add_f_from(&mut self, other: &Particle<D>) -> Vec<Real> {
         let mut f_from_other = Vec::with_capacity(3);
         let r: Real = self
             .pos
@@ -38,7 +38,7 @@ impl Particle {
     }
 }
 
-pub fn include_forces(p1: &mut Particle, p2: &mut Particle) {
+pub fn include_forces<const D: usize>(p1: &mut Particle<D>, p2: &mut Particle<D>) {
     let f_p2_into_p1 = p1.add_f_from(p2);
     for (d, force) in f_p2_into_p1.iter().enumerate() {
         p2.f[d] -= force;
