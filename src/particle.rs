@@ -41,7 +41,6 @@ impl<const D: usize> Particle<D> {
         let a = delta_t * (0.5 / self.m);
         for d in 0..self.pos.len() {
             self.pos[d] += delta_t * (self.v[d] + a * self.f[d]);
-            self.f_old[d] = self.f[d];
         }
     }
 
@@ -49,6 +48,12 @@ impl<const D: usize> Particle<D> {
         let a = delta_t * (0.5 / self.m);
         for d in 0..self.v.len() {
             self.v[d] += a * (self.f[d] + self.f_old[d]);
+        }
+    }
+
+    pub fn update_old_f(&mut self) {
+        for d in 0..self.f.len() {
+            self.f_old[d] = self.f[d];
         }
     }
 }
@@ -110,5 +115,21 @@ mod tests {
             expected_new_v[d] = v[d] + a * (f[d] + f[d]);
         }
         assert_eq!(particle.v, expected_new_v);
+    }
+
+    #[test]
+    fn update_old_force() {
+        let pos = [1.0, 2.0, 3.0];
+        let v = [1.0, 2.0, 3.0];
+        let f = [1.0, 2.0, 3.0];
+        let m = 6.0;
+        let mut particle = Particle::new(m, pos, v, f);
+
+        let expected_f = [2.0, 3.0, 4.0];
+        particle.f = expected_f;
+
+        particle.update_old_f();
+
+        assert_eq!(particle.f_old, expected_f);
     }
 }
