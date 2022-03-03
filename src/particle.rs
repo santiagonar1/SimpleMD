@@ -36,6 +36,21 @@ impl<const D: usize> Particle<D> {
 
         f_from_other
     }
+
+    pub fn update_pos(&mut self, delta_t: Real) {
+        let a = delta_t * (0.5 / self.m);
+        for d in 0..self.pos.len() {
+            self.pos[d] += delta_t * (self.v[d] + a * self.f[d]);
+            self.f_old[d] = self.f[d];
+        }
+    }
+
+    pub fn update_v(&mut self, delta_t: Real) {
+        let a = delta_t * (0.5 / self.m);
+        for d in 0..self.v.len() {
+            self.v[d] += a * (self.f[d] + self.f_old[d]);
+        }
+    }
 }
 
 pub fn include_forces<const D: usize>(p1: &mut Particle<D>, p2: &mut Particle<D>) {
@@ -57,5 +72,43 @@ mod tests {
         assert_eq!(particle.pos, [1.0, 2.0, 3.0]);
         assert_eq!(particle.v, [1.0, 2.0, 3.0]);
         assert_eq!(particle.f, [1.0, 2.0, 3.0]);
+    }
+
+    #[test]
+    fn update_position() {
+        let pos = [1.0, 2.0, 3.0];
+        let v = [1.0, 2.0, 3.0];
+        let f = [1.0, 2.0, 3.0];
+        let delta_t = 1.0;
+        let m = 6.0;
+        let mut particle = Particle::new(m, pos, v, f);
+
+        particle.update_pos(delta_t);
+
+        let mut expected_new_pos = [0.0, 0.0, 0.0];
+        let a = delta_t * 0.5 / m;
+        for d in 0..expected_new_pos.len() {
+            expected_new_pos[d] = pos[d] + delta_t * (v[d] + a * f[d]);
+        }
+        assert_eq!(particle.pos, expected_new_pos);
+    }
+
+    #[test]
+    fn update_velocity() {
+        let pos = [1.0, 2.0, 3.0];
+        let v = [1.0, 2.0, 3.0];
+        let f = [1.0, 2.0, 3.0];
+        let delta_t = 1.0;
+        let m = 6.0;
+        let mut particle = Particle::new(m, pos, v, f);
+
+        particle.update_v(delta_t);
+
+        let mut expected_new_v = [0.0, 0.0, 0.0];
+        let a = delta_t * 0.5 / m;
+        for d in 0..expected_new_v.len() {
+            expected_new_v[d] = v[d] + a * (f[d] + f[d]);
+        }
+        assert_eq!(particle.v, expected_new_v);
     }
 }
