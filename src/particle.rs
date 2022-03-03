@@ -39,22 +39,22 @@ impl<const D: usize> Particle<D> {
 
     pub fn update_pos(&mut self, delta_t: Real) {
         let a = delta_t * (0.5 / self.m);
-        for d in 0..self.pos.len() {
-            self.pos[d] += delta_t * (self.v[d] + a * self.f[d]);
-        }
+        self.pos
+            .iter_mut()
+            .enumerate()
+            .for_each(|(d, p)| *p += delta_t * (self.v[d] + a * self.f[d]));
     }
 
     pub fn update_v(&mut self, delta_t: Real) {
         let a = delta_t * (0.5 / self.m);
-        for d in 0..self.v.len() {
-            self.v[d] += a * (self.f[d] + self.f_old[d]);
-        }
+        self.v
+            .iter_mut()
+            .enumerate()
+            .for_each(|(d, v)| *v += a * (self.f[d] + self.f_old[d]));
     }
 
     pub fn update_old_f(&mut self) {
-        for d in 0..self.f.len() {
-            self.f_old[d] = self.f[d];
-        }
+        self.f_old.copy_from_slice(&self.f);
     }
 }
 
