@@ -21,7 +21,7 @@ impl<const D: usize> Particle<D> {
     }
 
     pub fn add_f_from(&mut self, other: &Particle<D>) -> Vec<Real> {
-        let mut f_from_other = Vec::with_capacity(3);
+        let mut f_from_other = Vec::with_capacity(D);
         let r: Real = self
             .pos
             .iter()
