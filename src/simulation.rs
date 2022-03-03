@@ -19,6 +19,7 @@ impl<const D: usize> Simulation<D> {
     fn update_pos(&mut self) {
         for particle in &mut self.particles {
             particle.update_pos(self.delta_t);
+            particle.update_old_f();
         }
     }
 
